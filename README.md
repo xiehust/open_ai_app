@@ -1,6 +1,6 @@
 1 Client
 
-npm install react react-router-dom react-scripts web-vitals formik formik-mui-x-date-pickers @fontsource/roboto @mui/icons-material @mui/material
+npm install react-router-dom formik formik-mui-x-date-pickers  @mui/icons-material @mui/material
 
 
 2 Server
