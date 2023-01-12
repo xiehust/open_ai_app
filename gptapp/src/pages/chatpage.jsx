@@ -14,6 +14,9 @@ import {
 import ContactlessIcon from "@mui/icons-material/Contactless";
 import { Formik, Form, useFormik } from "formik";
 import { useAuthorizedHeader } from "../commons/use-auth";
+import { useLocalStorage } from "../commons/localStorage";
+
+
 
 function generateUniqueId(){
   const timestamp = Date.now();
@@ -47,7 +50,7 @@ function stringAvatar(name) {
       bgcolor: stringToColor(name),
     },
     //   children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-    children: name[0] + name[name.length - 1],
+    children: name[0].toUpperCase() + name[name.length - 1].toUpperCase(),
   };
 }
 
@@ -120,7 +123,7 @@ const ChatBox = ({ msgItems,loading }) => {
    sx={{ 
         position: 'relative',
         overflow: 'auto',
-            height:750,
+            height:'100%',
         // width:'100%',
         }}
   >{items}
@@ -131,7 +134,8 @@ const ChatBox = ({ msgItems,loading }) => {
 };
 
 const InputSection = ({ setmsgItems,setLoading }) => {
-  const username = "RiverX";
+  const [local_stored_crediential,] = useLocalStorage('chat-login-token',null)
+  const username = local_stored_crediential.username;
   const [conversations,setConversations] = useState([]);
 //   console.log(conversations) ;
   const authheader = useAuthorizedHeader();
@@ -219,8 +223,9 @@ const ChatPage = () => {
 //   useMemo(() => {}, []);
   return (
 
-    <Box sx={{display: 'grid',bgcolor:grey[200],
-    gridTemplateRows:'40 700 auto',
+    <Box sx={{display: 'grid',
+    // bgcolor:grey[200],
+    gridTemplateRows:'40 auto',
     }}
     >
       <TopNavHeader />

@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useMemo} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,8 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from '../commons/use-auth';
-import FormControl, { useFormControl } from '@mui/material/FormControl';
+// import FormControl, { useFormControl } from '@mui/material/FormControl';
 import {useNavigate} from 'react-router-dom';
+import { useLocalStorage } from '../commons/localStorage';
 
 function Copyright(props) {
   return (
@@ -33,23 +34,38 @@ const theme = createTheme();
 
 const SignIn = () => {
   const auth = useAuth();
+  const [checked, setChecked] = useState(false);
+  const [local_stored_crediential,setLocalStoredCred] = useLocalStorage('chat-login-token',null)
   const [errorstate, setErrorState] = useState(false);
   const [errormsg, setErrMsg] = useState('');
-  const { focused } = useFormControl() || {};
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const navigate = useNavigate();
   const isAuthenticated = auth.user && auth.user.isAuthorized;
-    useEffect(()=>{
+  useEffect(()=>{
         if(isAuthenticated){
             navigate('/chat');
         }
     },[navigate,auth]);
 
-
+  useEffect(()=>{
+    if (local_stored_crediential) {
+        setChecked(local_stored_crediential.checked);
+        if (local_stored_crediential.checked) {
+          setUsername(local_stored_crediential.username);
+          setPassword(local_stored_crediential.password);
+        }
+    }
+  },[checked,local_stored_crediential]);
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    auth.signin(data.get('username'),data.get('password'))
-    .then()
+    const formdata = new FormData(event.currentTarget);
+    auth.signin(formdata.get('username'),formdata.get('password'))
+    .then(()=>{
+      setLocalStoredCred({username:formdata.get('username'),
+                    password:formdata.get('password'),
+                   checked:checked});
+    })
     .catch(error =>{ 
       setErrorState(true);
       setErrMsg(error.message);
@@ -86,6 +102,8 @@ const SignIn = () => {
               id="username"
               label="Username"
               name="username"
+              value ={username}
+              onChange = {(event) => { setUsername(event.target.value);}}
               autoFocus
             />
             <TextField
@@ -98,10 +116,18 @@ const SignIn = () => {
               label="Password"
               type="password"
               id="password"
+              value ={password}
+              onChange = {(event) => { setPassword(event.target.value);}}
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox 
+                checked={checked}
+                onChange={(event) =>{
+                  setChecked(event.target.checked);
+                  setLocalStoredCred({checked:event.target.checked});
+                }}
+               color="primary" />}
               label="Remember me"
             />
             <Button

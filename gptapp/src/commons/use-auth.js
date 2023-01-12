@@ -1,6 +1,6 @@
 import React, { useState, useContext, createContext } from "react";
 import { loginAuth } from "./apigw";
-const storageName = 'chat-login-token';
+
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ...
 // ... available to any child component that calls useAuth().
@@ -22,8 +22,6 @@ export function useAuthUserInfo(){
 
 export function useAuthorizedHeader(){
     const auth = useAuth();
-    // const [local_stored_tokendata,] = useLocalStorage(storageName,null)
-    // const authdata = auth.user?auth.user:local_stored_tokendata;
     const token = auth.user?auth.user.token:'';
     return {
             'Content-Type':'application/json;charset=utf-8',

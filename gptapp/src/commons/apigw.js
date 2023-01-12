@@ -1,5 +1,5 @@
-// const API_endpoint = 'http://43.207.39.126:5001/chat';
-const API_endpoint = 'http://localhost:5001/';
+// const API_endpoint = 'http://43.207.39.126:5001/';
+const API_endpoint = 'http://localhost:5001/'
 export const getAnswer = async(respid,text,headers) =>{
     const options ={
         method:'POST',
