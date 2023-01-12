@@ -4,35 +4,34 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import MenuIcon from '@mui/icons-material/Menu';
 import { grey } from '@mui/material/colors';
-
-
+import Typography from '@mui/material/Typography';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 
 export const TopNavHeader =()=>{
 return (
-    <Box
-      sx={{
-        width: '100%',
-        height: 36,
-        p:0.5,
-        fontSize: '0.875rem',
-        alignItems: 'center',
-        position: 'sticky',
-        top: 0,
-        display: 'flex',
-        color: grey[100],
-        justifyContent: 'space-between',
-        backgroundColor:'primary.dark',
-         fontWeight: '700',
-      }}
-    >
-     <IconButton aria-label="back" size="small" href='/'>
+<Box sx={{ flexGrow: 1 }}>
+<AppBar position="sticky" >
+<Toolbar>
+<IconButton aria-label="back" edge="start" color="inherit" size="small" href='/'>
         <ArrowBackIosIcon sx={{ color: grey[100] }}/>
       </IconButton>
-    <Box>{"AI ChatBot"}</Box>
-    <IconButton aria-label="menu">
-        <MenuIcon  sx={{ color: grey[100] }}/>
-      </IconButton>
-    </Box>
-)
-}
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          AI Assit
+      </Typography>
+      <IconButton
+            size="small"
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+</Toolbar>
+</AppBar>
+
+</Box>
+
+)}
 

@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect,useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { TopNavHeader } from "./components";
-import { deepOrange, deepPurple, lightGreen, grey } from "@mui/material/colors";
+import {  lightGreen, grey } from "@mui/material/colors";
+import IconButton from '@mui/material/IconButton';
+import SendIcon from '@mui/icons-material/Send';
 import {getAnswer} from '../commons/apigw';
 import {
   Box,
@@ -11,7 +13,8 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import ContactlessIcon from "@mui/icons-material/Contactless";
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+
 import { Formik, Form, useFormik } from "formik";
 import { useAuthorizedHeader } from "../commons/use-auth";
 import { useLocalStorage } from "../commons/localStorage";
@@ -123,10 +126,12 @@ const ChatBox = ({ msgItems,loading }) => {
    sx={{ 
         position: 'relative',
         overflow: 'auto',
-            height:'100%',
+            // height:'80%',
         // width:'100%',
         }}
-  >{items}
+  >
+  <MsgItem id={generateUniqueId()} who="AI" text ={"Welcome! Can I help you? 我还会中文以及其他999种语言"}/>
+  {items}
   {loading? <MsgItem who={BOTNAME} text={loadingtext} />:<div/>}
   <ListItem ref={scrollRef} />
   </List>
@@ -181,22 +186,34 @@ const InputSection = ({ setmsgItems,setLoading }) => {
       <Form onSubmit={formik.handleSubmit}>
         <Box
           sx={{
-            display: "grid",
+            display: "flex",
+            direction:"row",
+            justifyContent:"space-between",
+            alignItems: "center",
+
             borderTop: 1,
             p: 1,
-            gap: 1,
             bgcolor: grey[50],
             borderColor: grey[400],
-            alignItems: "center",
-            gridTemplateColumns: "24px 70% 15%",
+            
+            // gridTemplateColumns: "24px auto auto",
             position:'fixed',
             width:'100%',
+            // height:32,
             bottom:0,
           }}
         >
-          <ContactlessIcon/>
+        <IconButton aria-label="refresh" edge="start" color="info" 
+              sx={{ ml: 0.25 }}
+              onClick={()=>{
+                setConversations([]);
+                setmsgItems([]);
+              }}
+              >
+          <RestartAltIcon size="medium"/>
+        </IconButton>
           <OutlinedInput 
-            sx={{bgcolor: "white",}}
+            sx={{bgcolor: "white", flexGrow: 1, ml:0.5,mr:0.5}}
             value={formik.values.prompt}
             onChange={(event) => {
               formik.setValues({ prompt: event.target.value });
@@ -204,34 +221,27 @@ const InputSection = ({ setmsgItems,setLoading }) => {
             multiline
             placeholder="Please enter text"
           />
+        <IconButton aria-label="send" edge="end" color="primary"  type="submit" sx={{ mr: 2 }}>
+          <SendIcon size="large"/>
+        </IconButton>
 
-          <Button variant="contained" type="submit">
-            Send
-          </Button>
         </Box>
       </Form>
     </Formik>
   );
 };
 const ChatPage = () => {
-  const [msgItems, setmsgItems] = useState([
-    { id: generateUniqueId(), who: "AIBot", text: "Welcome" },
-  ]);
+  const [msgItems, setmsgItems] = useState([]);
   const [loading,setLoading] = useState(false);
  
 
-//   useMemo(() => {}, []);
   return (
 
-    <Box sx={{display: 'grid',
-    // bgcolor:grey[200],
-    gridTemplateRows:'40 auto',
-    }}
-    >
+    <Stack direction="column" spacing={2} sx={{pb:5}}>
       <TopNavHeader />
       <ChatBox  msgItems={msgItems}  loading={loading}/>
       <InputSection  setmsgItems={setmsgItems} setLoading={setLoading} />
-      </Box>
+    </Stack>
 
   );
 };
