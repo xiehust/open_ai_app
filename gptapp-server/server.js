@@ -5,7 +5,7 @@ import { Configuration,OpenAIApi } from 'openai';
 import * as mysql from 'mysql';
 import jwt from 'jsonwebtoken';
 
-
+// const debug =true;
 
 const createToken = (username) => {
     return jwt.sign({username:username}, process.env.TOKEN_KEY,{expiresIn: "2h",});
@@ -121,7 +121,7 @@ app.post('/login', async (req, res) => {
 
 
 app.post('/chat',verifyToken,async (req, res) => {
-    const debug =false;
+    
     if (req.body.prompt === undefined || req.body.prompt === ''){
         res.status(400).send({
             bot: 'invalid prompt'
