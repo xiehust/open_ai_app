@@ -34,7 +34,7 @@ const createUser = async (username,password,token) => {
     })
 }
 
-let username = 'chuanxie';
+let username = 'test';
 let password = '12345600';
 let token = createToken(username);
 let resp = await createUser(username,password,token);
