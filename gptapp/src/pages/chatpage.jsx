@@ -101,7 +101,7 @@ const ChatBox = ({ msgItems,loading }) => {
  const [loadingtext,setLoaderTxt] = useState('.');
     useEffect(()=>{
       let textContent = '';
-      setInterval(() => {
+      const interval = setInterval(() => {
           setLoaderTxt( v=> v+'.');
           textContent+='.';
           if (textContent.length > 5) {
@@ -109,6 +109,7 @@ const ChatBox = ({ msgItems,loading }) => {
               textContent='';
           }
       }, 500);
+      clearInterval(interval);
     },[]);
   const scrollRef = useRef(null);
   useEffect(() => {
